@@ -81,31 +81,71 @@ export class Matchmaking {
             this.matches.push(match);
         }
         console.log(this.matches);
-
-        /*         this.participants[0].elo = 1800;
-        this.participants[1].elo = 1800;
-        this.participants[2].elo = 1800;
-        this.participants[3].elo = 1800;
-        var newArray = this.participants.sort((a, b) => a.elo - b.elo);
-        newArray.reverse();
-        console.log(newArray)*/
+        this.participants.sort((a, b) => b.elo - a.elo);
     }
 
     /* Change Elo based on match result */
-    MatchResult(matchid: number, team: number) {
+    MatchResult(matchid: number, teamOneScore: string, teamTwoScore: string) {
+        const team1Score = teamOneScore;
+        const team2Score = teamTwoScore;
+        const k = 32;
         var result = this.matches[matchid];
-        if (team == 1) {
-            for (let i = 0; i < this.numOfParticipantsPerMatch / this.numPerTeam; i++) {
-                result.team1[i].elo += 25;
-                result.team2[i].elo -= 25;
-            }
-        } else if (team == 2) {
-            for (let i = 0; i < this.numOfParticipantsPerMatch / this.numPerTeam; i++) {
-                result.team2[i].elo += 25;
-                result.team1[i].elo -= 25;
-            }
+        const team1: Participant[] = result.team1;
+        const team2: Participant[] = result.team2;
+
+        const elo1 = team1.reduce((sum, participant) => sum + participant.elo, 0) / team1.length;
+        const elo2 = team2.reduce((sum, participant) => sum + participant.elo, 0) / team2.length;
+
+        const expectedScore1 = 1 / (1 + Math.pow(10, (elo2 - elo1) / 400));
+        const expectedScore2 = 1 / (1 + Math.pow(10, (elo1 - elo2) / 400));
+
+        let rating1, rating2;
+
+        if (team1Score > team2Score) {
+            rating1 = team1.map(participant => {
+                const expectedScore = expectedScore1;
+                const score = participant.inMatch ? team1Score : team2Score;
+                const rating = participant.elo + k * (1 - expectedScore);
+                participant.elo = Math.floor(rating);
+                participant.inMatch = false;
+                return participant;
+            });
+
+            rating2 = team2.map(participant => {
+                const expectedScore = expectedScore2;
+                const score = participant.inMatch ? team2Score : team1Score;
+                const rating = participant.elo + k * (0 - expectedScore);
+                participant.elo = Math.floor(rating);
+                participant.inMatch = false;
+                return participant;
+            });
+        } else if (team2Score > team1Score) {
+            rating1 = team1.map(participant => {
+                const expectedScore = expectedScore1;
+                const score = participant.inMatch ? team1Score : team2Score;
+                const rating = participant.elo + k * (0 - expectedScore);
+                participant.elo = Math.floor(rating);
+                participant.inMatch = false;
+                return participant;
+            });
+
+            rating2 = team2.map(participant => {
+                const expectedScore = expectedScore2;
+                const score = participant.inMatch ? team2Score : team1Score;
+                const rating = participant.elo + k * (1 - expectedScore);
+                participant.elo = Math.floor(rating);
+                participant.inMatch = false;
+                return participant;
+            });
+        } else {
+            // handle tie scenario
         }
         this.participants.sort((a, b) => b.elo - a.elo);
+        const matchOver: number = this.matches.findIndex(x => x.id == matchid);
+        if(matchOver > -1){
+            this.matches.splice(matchOver, 1);
+        }
+        console.log(this.matches);
     }
 
     /* Create Test Participants */

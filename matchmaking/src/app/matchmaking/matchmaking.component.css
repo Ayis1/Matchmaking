@@ -1,5 +1,5 @@
 div {
-    padding-top: 2.5px;
+    margin-top: 2.5px;
     padding-bottom: 2.5px;
   }
 
@@ -10,7 +10,7 @@ div {
   }
   
   .participant-card {
-    min-width: 310px;
+    min-width: 200px;
     margin-bottom: 20px;
     background-color: rgba(54, 54, 54, 0.137);
     padding: 10px;
@@ -29,8 +29,18 @@ div {
     text-align: center;
   }
 
-  .button-padding {
+  .margin {
     margin-top: 5px;
     margin-bottom: 5px;
-    margin-right: 10px
+    margin-right: 10px;
   }
+
+  .match-score-input{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 10px;
+    min-width: 110px;
+    max-width: 110px;
+    text-align: center;
+  }
+  
