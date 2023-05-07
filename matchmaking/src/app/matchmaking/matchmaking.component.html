@@ -1,0 +1,40 @@
+<div class="add-player-container">
+    <button (click)="CreateNewParticipant(newParticipantName)" class="button-padding">
+        Add participant
+    </button>
+    <input #newParticipant>
+</div>
+<div>
+    <button (click)="CreateTestParticipants()" class="button-padding">
+        Create test Participants
+    </button>
+    <button (click)="ClearParticipants()" class="button-padding">
+        Clear Participants
+    </button>
+</div>
+
+<div [hidden]="!participantsMade">
+<h3>Participants:</h3>
+    <div class="content-container">
+        <div *ngFor="let participant of participants" class="participant-card">
+            <div>Name: {{ participant.name }}</div>
+            <div>Elo: {{ participant.elo }}</div>
+        </div>
+    </div>
+    <button (click)="CreateMatch()" class="button-padding">
+        Create Match
+    </button>
+    <div class="content-container">
+        <div *ngFor="let match of matches" class="match-card">
+            <h2> Match {{ match.id+1 }}</h2>
+            <div> Team1: {{ match.team1[0].name }} {{ match.team1[0].elo }}, {{ match.team1[1].name }}, {{ match.team1[1].elo }}</div>
+            <div> Team2: {{ match.team2[0].name }} {{ match.team2[0].elo }}, {{ match.team2[1].name }}, {{ match.team2[1].elo }}</div>
+            <button (click)="MatchResult(match.id, 1)" class="button-padding">
+                Team 1 victory
+            </button>
+            <button (click)="MatchResult(match.id, 2)" class="button-padding">
+                Team 2 victory
+            </button>
+        </div>
+    </div>
+</div>
