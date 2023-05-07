@@ -140,12 +140,18 @@ export class Matchmaking {
         } else {
             // handle tie scenario
         }
+        const match = this.matches.find(m => m.id === matchid);
+        if (match) {
+            console.log("match=", match);
+            console.log("match.team1=", match.team1);
+            console.log("match.team2=", match.team2);
+        }
         this.participants.sort((a, b) => b.elo - a.elo);
-        const matchOver: number = this.matches.findIndex(x => x.id == matchid);
-        if(matchOver > -1){
+        const matchOver: number = this.matches.findIndex(x => x.id === matchid);
+
+        if (matchOver > -1) {
             this.matches.splice(matchOver, 1);
         }
-        console.log(this.matches);
     }
 
     /* Create Test Participants */
