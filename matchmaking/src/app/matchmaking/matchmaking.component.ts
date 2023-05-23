@@ -20,6 +20,14 @@ export class Matchmaking {
     availableParticipants: Array<Participant> = [];
     numOfParticipantsPerMatch: number = 4;
     numPerTeam: number = 2;
+    includes: boolean = false;
+    
+    constructor(){      
+     /* const url = window.location.href;
+        url.includes('local') ? this.includes = true : this.includes = false;
+        console.log(this.includes);
+        console.log("eyo?") */
+    }
 
     /*Create new participant from input field */
     CreateNewParticipant(newParticipantName: string | null) {
@@ -81,14 +89,13 @@ export class Matchmaking {
             this.matches.push(match);
         }
         console.log(this.matches);
-        this.participants.sort((a, b) => b.elo - a.elo);
     }
 
     /* Change Elo based on match result */
     MatchResult(matchid: number, teamOneScore: string, teamTwoScore: string) {
         const team1Score = teamOneScore;
         const team2Score = teamTwoScore;
-        const k = 32;
+        const k = 95;
         var result = this.matches[matchid];
         const team1: Participant[] = result.team1;
         const team2: Participant[] = result.team2;
@@ -138,20 +145,10 @@ export class Matchmaking {
                 return participant;
             });
         } else {
-            // handle tie scenario
-        }
-        const match = this.matches.find(m => m.id === matchid);
-        if (match) {
-            console.log("match=", match);
-            console.log("match.team1=", match.team1);
-            console.log("match.team2=", match.team2);
+            /* Handle tie, do nothing */
         }
         this.participants.sort((a, b) => b.elo - a.elo);
-        const matchOver: number = this.matches.findIndex(x => x.id === matchid);
-
-        if (matchOver > -1) {
-            this.matches.splice(matchOver, 1);
-        }
+        delete this.matches[matchid];
     }
 
     /* Create Test Participants */

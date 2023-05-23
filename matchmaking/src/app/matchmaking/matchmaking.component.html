@@ -5,6 +5,12 @@
     <input #newParticipant>
 </div>
 <div>
+    <!--<button (click)="CreateTestParticipants()" class="margin" *ngIf="includes; else dosomething">
+        Eyo this is a button
+    </button>
+    <ng-template #dosomething>
+        <h2>WTF BRO</h2>
+    </ng-template> -->
     <button (click)="CreateTestParticipants()" class="margin">
         Create test Participants
     </button>
@@ -25,17 +31,19 @@
         Create Match
     </button>
     <div class="content-container">
-        <div *ngFor="let match of matches" class="match-card">
-            <h2> Match {{ match.id+1 }}</h2>
-            <div> Team1: {{ match.team1[0].name }} {{ match.team1[0].elo }}, {{ match.team1[1].name }}, {{ match.team1[1].elo }}</div>
-            vs
-            <div> Team2: {{ match.team2[0].name }} {{ match.team2[0].elo }}, {{ match.team2[1].name }}, {{ match.team2[1].elo }}</div>
-            <input #teamOneScore placeholder="Team 1 score" class="match-score-input" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
-            <input #teamTwoScore placeholder="Team 2 score" class="match-score-input" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
-            <div>
-                <button (click)="MatchResult(match.id, teamOneScore.value, teamTwoScore.value)" class="margin">
-                    Conclude match
-                </button>
+        <div *ngFor="let match of matches">
+            <div *ngIf="match?.id != null" class="match-card">
+                <h2 > Match {{ match.id+1 }}</h2>
+                <div> Team1: {{ match.team1[0].name }} {{ match.team1[0].elo }}, {{ match.team1[1].name }}, {{ match.team1[1].elo }}</div>
+                vs
+                <div> Team2: {{ match.team2[0].name }} {{ match.team2[0].elo }}, {{ match.team2[1].name }}, {{ match.team2[1].elo }}</div>
+                <input #teamOneScore placeholder="Team 1 score" class="match-score-input" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
+                <input #teamTwoScore placeholder="Team 2 score" class="match-score-input" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
+                <div>
+                    <button (click)="MatchResult(match.id, teamOneScore.value, teamTwoScore.value)" class="margin">
+                        Conclude match
+                    </button>
+                </div>
             </div>
         </div>
     </div>
